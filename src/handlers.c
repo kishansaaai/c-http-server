@@ -31,9 +31,39 @@ void handle_static_file(const HttpRequest *req, HttpResponse *res, const char *d
         strncat(file_path, "index.html", sizeof(file_path) - strlen(file_path) - 1);
     }
     
+    char resolved_path[1024];
+    char resolved_root[1024];
+    
+    if (realpath(document_root, resolved_root) == NULL) {
+        res->status_code = 500;
+        res->status_message = "Internal Server Error";
+        res->body = strdup("500 Internal Server Error");
+        res->body_length = strlen(res->body);
+        http_add_header(res, "Content-Type", "text/plain");
+        return;
+    }
+
+    if (realpath(file_path, resolved_path) == NULL) {
+        res->status_code = 404;
+        res->status_message = "Not Found";
+        res->body = strdup("404 Not Found");
+        res->body_length = strlen(res->body);
+        http_add_header(res, "Content-Type", "text/plain");
+        return;
+    }
+
+    if (strncmp(resolved_path, resolved_root, strlen(resolved_root)) != 0) {
+        res->status_code = 403;
+        res->status_message = "Forbidden";
+        res->body = strdup("403 Forbidden");
+        res->body_length = strlen(res->body);
+        http_add_header(res, "Content-Type", "text/plain");
+        return;
+    }
+    
     struct stat st;
-    if (stat(file_path, &st) == 0 && S_ISREG(st.st_mode)) {
-        int fd = open(file_path, O_RDONLY);
+    if (stat(resolved_path, &st) == 0 && S_ISREG(st.st_mode)) {
+        int fd = open(resolved_path, O_RDONLY);
         if (fd >= 0) {
             res->status_code = 200;
             res->status_message = "OK";
@@ -41,7 +71,7 @@ void handle_static_file(const HttpRequest *req, HttpResponse *res, const char *d
             res->body_length = st.st_size;
             res->file_fd = fd;
             
-            const char *mime_type = get_mime_type(file_path);
+            const char *mime_type = get_mime_type(resolved_path);
             http_add_header(res, "Content-Type", mime_type);
         } else {
             res->status_code = 500;
@@ -91,6 +121,8 @@ void handle_cgi(const HttpRequest *req, HttpResponse *res, const char *cgi_root)
         res->body = strdup("Fork failed");
         res->body_length = strlen(res->body);
         http_add_header(res, "Content-Type", "text/plain");
+        close(pipefd[0]);
+        close(pipefd[1]);
         return;
     }
 
