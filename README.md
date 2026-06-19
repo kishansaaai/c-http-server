@@ -67,6 +67,10 @@ cgi_root=./cgi-bin
 - `GET /cgi-bin/*` or `POST /cgi-bin/*` -> Executes the specified script in the CGI root.
 - `POST /upload` -> Handles `multipart/form-data` uploads and saves them to the `uploads/` directory.
 
+## Known Limitations
+
+- **Buffer Size**: The server reads incoming requests into a fixed-size `BUFFER_SIZE` array (64KB). Requests or uploads larger than this limit are not properly handled because the read loop expects the full request to fit into this initial buffer.
+
 ## License
 
 MIT
