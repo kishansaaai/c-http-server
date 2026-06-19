@@ -1,0 +1,25 @@
+# Object files
+*.o
+
+# Executables
+http_server
+http_server.exe
+
+# Build directories
+build/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+server.log
+
+# Uploaded files
+uploads/*
+!uploads/.gitkeep

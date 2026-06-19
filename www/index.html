@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudDrive - Non-Blocking HTTP Server</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.5 19C19.9853 19 22 16.9853 22 14.5C22 12.1325 20.177 10.2014 17.8637 10.0152C17.3828 6.6111 14.4746 4 11 4C7.13401 4 4 7.13401 4 11C4 11.2335 4.01146 11.4643 4.03362 11.6917C2.29656 12.2854 1 13.9877 1 16C1 18.7614 3.23858 21 6 21H16"></path>
+                </svg>
+                <span>CloudDrive</span>
+            </div>
+            <nav>
+                <a href="#" class="active">My Files</a>
+                <a href="#">Recent</a>
+                <a href="#">Settings</a>
+            </nav>
+        </header>
+
+        <main>
+            <div class="action-bar">
+                <h2>My Files</h2>
+            </div>
+
+            <div class="upload-zone" id="upload-zone">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Drag and drop files here or <span class="browse-btn">browse</span></p>
+                <input type="file" id="file-input" style="display: none;">
+            </div>
+
+            <div class="file-grid" id="file-grid">
+                <!-- Files will be injected here via JS -->
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
